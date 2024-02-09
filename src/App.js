@@ -51,12 +51,31 @@ const pizzaData = [
 function App() {
   return (
     <div>
-      <h1>Hello</h1>
-      <Pizza />
-      <Pizza />
-      <Pizza />
+      <Header/>
+
+      <Footer/>
     </div>
   );
+}
+
+
+const Header=()=>{
+  return <h1>Fast React Pizza Co.</h1>
+
+
+}
+
+function Menu(){
+  return <div>
+    <h2> Our Menu</h2>
+    <Pizza />
+    <Pizza />
+    <Pizza />
+  </div>
+
+}
+function Footer(){
+return <footer>{new Date().toLocaleTimeString()} We're currently open</footer>
 }
 
 
