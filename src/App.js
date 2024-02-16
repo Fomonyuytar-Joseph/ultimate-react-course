@@ -67,17 +67,19 @@ const Header = () => {
 };
 
 function Menu() {
+  const pizzas = pizzaData;
+  const numPizzas = pizzas.length
   return (
     <main className="menu">
       <h2> Our Menu</h2>
       <ul className="pizzas">
         {
-          pizzaData.map((pizza,index)=>
+   numPizzas > 0 ? pizzas.map((pizza,index)=>
            <Pizza
              pizzaObj={pizza}
              key={index}
            />
-          )
+          ) : <p>We are still working on our menu please come back later</p>
         }
       </ul>
       {/* <Pizza
@@ -116,7 +118,15 @@ function Footer() {
   // }
   return (
     <footer className="footer">
-      {new Date().toLocaleTimeString()} We're currently open
+      {isOpen ? (
+        <div className="order">
+          <p>We're open until {closeHour}:00. Come visit us or order online.</p>
+        </div>
+      ) : (
+        <p>
+          We're happy to welcome you between {openHour}:00 and {closeHour}:00. </p>
+      )}
+      {/* {new Date().toLocaleTimeString()} We're currently open */}
     </footer>
   );
 }
