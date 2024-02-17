@@ -72,16 +72,23 @@ function Menu() {
   return (
     <main className="menu">
       <h2> Our Menu</h2>
-      <ul className="pizzas">
-        {
-   numPizzas > 0 ? pizzas.map((pizza,index)=>
-           <Pizza
-             pizzaObj={pizza}
-             key={index}
-           />
-          ) : <p>We are still working on our menu please come back later</p>
-        }
-      </ul>
+
+      {numPizzas > 0 ? (
+        <>
+          <p>
+            Authentic Italian cuisine. 6 creative dishes to choose from. Att
+            from our stone oven, all organic, all delicious.
+          </p>
+          <ul className="pizzas">
+            {pizzas.map((pizza, index) => (
+              <Pizza pizzaObj={pizza} key={index} />
+            ))}
+          </ul>
+        </>
+      ) : (
+        <p>We are still working on our menu please come back later</p>
+      )}
+
       {/* <Pizza
         name="Pizza Prosciutto"
         photoName="pizzas/prosciutto.jpg"
@@ -94,12 +101,12 @@ function Menu() {
 
 function Pizza({pizzaObj}) {
   return (
-    <li className="pizza">
+    <li className={`pizza ${pizzaObj.soldOut ? 'sold-out':''}`}>
       <img src={pizzaObj.photoName} alt={pizzaObj.photoName} />
       <div>
         <h3>{pizzaObj.name}</h3>
         <p>{pizzaObj.ingredients}</p>
-        <span>{pizzaObj.price}</span>
+        <span>{ pizzaObj.soldOut ? 'SOLD OUT': pizzaObj.price}</span>
       </div>
     </li>
   );
@@ -114,7 +121,7 @@ function Footer() {
   return (
     <footer className="footer">
       {isOpen ? (
-       <Order closeHour={closeHour}/>
+       <Order closeHour={closeHour} openHour={openHour}/>
       ) : (
         <p>
           We're happy to welcome you between {openHour}:00 and {closeHour}:00. </p>
@@ -126,10 +133,10 @@ function Footer() {
 
 
 
-function Order ({closeHour}){
+function Order ({closeHour ,openHour}){
   return (
     <div className="order">
-      <p>We're open until {closeHour}:00. Come visit us or order online.</p>
+      <p>We're open from {openHour}:00 to {closeHour}:00. Come visit us or order online.</p>
       <button className="btn">Order</button>
     </div>
   );
