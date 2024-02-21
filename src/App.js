@@ -1,5 +1,6 @@
 // import logo from './logo.svg';
 import "./App.css";
+import { useState } from "react";
 
 const pizzaData = [
   {
@@ -47,6 +48,13 @@ const pizzaData = [
 ];
 
 function App() {
+  const [step, setStep] = useState(1);
+
+
+  const handleNext =()=>{
+    setStep((currentStep)=> currentStep + 1)
+  }
+
   return (
     <div className="container">
       <Header />
