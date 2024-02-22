@@ -1,152 +1,169 @@
-// import logo from './logo.svg';
-import "./App.css";
 import { useState } from "react";
+import './App.css'
 
-const pizzaData = [
+const tempMovieData = [
   {
-    name: "Focaccia",
-    ingredients: "Bread with italian olive oil and rosemary",
-    price: 6,
-    photoName: "pizzas/focaccia.jpg",
-    soldOut: false,
+    imdbID: "tt1375666",
+    Title: "Inception",
+    Year: "2010",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
   },
   {
-    name: "Pizza Margherita",
-    ingredients: "Tomato and mozarella",
-    price: 10,
-    photoName: "pizzas/margherita.jpg",
-    soldOut: false,
+    imdbID: "tt0133093",
+    Title: "The Matrix",
+    Year: "1999",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
   },
   {
-    name: "Pizza Spinaci",
-    ingredients: "Tomato, mozarella, spinach, and ricotta cheese",
-    price: 12,
-    photoName: "pizzas/spinaci.jpg",
-    soldOut: false,
-  },
-  {
-    name: "Pizza Funghi",
-    ingredients: "Tomato, mozarella, mushrooms, and onion",
-    price: 12,
-    photoName: "pizzas/funghi.jpg",
-    soldOut: false,
-  },
-  {
-    name: "Pizza Salamino",
-    ingredients: "Tomato, mozarella, and pepperoni",
-    price: 15,
-    photoName: "pizzas/salamino.jpg",
-    soldOut: true,
-  },
-  {
-    name: "Pizza Prosciutto",
-    ingredients: "Tomato, mozarella, ham, aragula, and burrata cheese",
-    price: 18,
-    photoName: "pizzas/prosciutto.jpg",
-    soldOut: false,
+    imdbID: "tt6751668",
+    Title: "Parasite",
+    Year: "2019",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg",
   },
 ];
 
-function App() {
-  const [step, setStep] = useState(1);
+const tempWatchedData = [
+  {
+    imdbID: "tt1375666",
+    Title: "Inception",
+    Year: "2010",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
+    runtime: 148,
+    imdbRating: 8.8,
+    userRating: 10,
+  },
+  {
+    imdbID: "tt0088763",
+    Title: "Back to the Future",
+    Year: "1985",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BZmU0M2Y1OGUtZjIxNi00ZjBkLTg1MjgtOWIyNThiZWIwYjRiXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg",
+    runtime: 116,
+    imdbRating: 8.5,
+    userRating: 9,
+  },
+];
 
+const average = (arr) =>
+  arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
-  const handleNext =()=>{
-    setStep((currentStep)=> currentStep + 1)
-  }
+export default function App() {
+  const [query, setQuery] = useState("");
+  const [movies, setMovies] = useState(tempMovieData);
+  const [watched, setWatched] = useState(tempWatchedData);
+  const [isOpen1, setIsOpen1] = useState(true);
+  const [isOpen2, setIsOpen2] = useState(true);
+
+  const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
+  const avgUserRating = average(watched.map((movie) => movie.userRating));
+  const avgRuntime = average(watched.map((movie) => movie.runtime));
 
   return (
-    <div className="container">
-      <Header />
-      <Menu />
-      <Footer />
-    </div>
+    <>
+      <nav className="nav-bar">
+        <div className="logo">
+          <span role="img">🍿</span>
+          <h1>usePopcorn</h1>
+        </div>
+        <input
+          className="search"
+          type="text"
+          placeholder="Search movies..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <p className="num-results">
+          Found <strong>{movies.length}</strong> results
+        </p>
+      </nav>
+
+      <main className="main">
+        <div className="box">
+          <button
+            className="btn-toggle"
+            onClick={() => setIsOpen1((open) => !open)}
+          >
+            {isOpen1 ? "–" : "+"}
+          </button>
+          {isOpen1 && (
+            <ul className="list">
+              {movies?.map((movie) => (
+                <li key={movie.imdbID}>
+                  <img src={movie.Poster} alt={`${movie.Title} poster`} />
+                  <h3>{movie.Title}</h3>
+                  <div>
+                    <p>
+                      <span>🗓</span>
+                      <span>{movie.Year}</span>
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div className="box">
+          <button
+            className="btn-toggle"
+            onClick={() => setIsOpen2((open) => !open)}
+          >
+            {isOpen2 ? "–" : "+"}
+          </button>
+          {isOpen2 && (
+            <>
+              <div className="summary">
+                <h2>Movies you watched</h2>
+                <div>
+                  <p>
+                    <span>#️⃣</span>
+                    <span>{watched.length} movies</span>
+                  </p>
+                  <p>
+                    <span>⭐️</span>
+                    <span>{avgImdbRating}</span>
+                  </p>
+                  <p>
+                    <span>🌟</span>
+                    <span>{avgUserRating}</span>
+                  </p>
+                  <p>
+                    <span>⏳</span>
+                    <span>{avgRuntime} min</span>
+                  </p>
+                </div>
+              </div>
+
+              <ul className="list">
+                {watched.map((movie) => (
+                  <li key={movie.imdbID}>
+                    <img src={movie.Poster} alt={`${movie.Title} poster`} />
+                    <h3>{movie.Title}</h3>
+                    <div>
+                      <p>
+                        <span>⭐️</span>
+                        <span>{movie.imdbRating}</span>
+                      </p>
+                      <p>
+                        <span>🌟</span>
+                        <span>{movie.userRating}</span>
+                      </p>
+                      <p>
+                        <span>⏳</span>
+                        <span>{movie.runtime} min</span>
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+      </main>
+    </>
   );
 }
-
-const Header = () => {
-  // const style = {color:'red',fontSize:'47px',textTransform:'uppercase'}
-  const style = {};
-  return (
-    <header className="header">
-      <h1 style={style}>Fast React Pizza Co.</h1>
-    </header>
-  );
-};
-
-function Menu() {
-  const pizzas = pizzaData;
-  const numPizzas = pizzas.length
-  return (
-    <main className="menu">
-      <h2> Our Menu</h2>
-
-      {numPizzas > 0 ? (
-        <>
-          <p>
-            Authentic Italian cuisine. 6 creative dishes to choose from. Att
-            from our stone oven, all organic, all delicious.
-          </p>
-          <ul className="pizzas">
-            {pizzas.map((pizza, index) => (
-              <Pizza pizzaObj={pizza} key={index} />
-            ))}
-          </ul>
-        </>
-      ) : (
-        <p>We are still working on our menu please come back later</p>
-      )}
-
-      {/* <Pizza
-        name="Pizza Prosciutto"
-        photoName="pizzas/prosciutto.jpg"
-        ingredients="Tomato, mozarella, ham, aragula, and burrata cheese"
-        price={10}
-      /> */}
-    </main>
-  );
-}
-
-function Pizza({pizzaObj}) {
-  return (
-    <li className={`pizza ${pizzaObj.soldOut ? 'sold-out':''}`}>
-      <img src={pizzaObj.photoName} alt={pizzaObj.photoName} />
-      <div>
-        <h3>{pizzaObj.name}</h3>
-        <p>{pizzaObj.ingredients}</p>
-        <span>{ pizzaObj.soldOut ? 'SOLD OUT': pizzaObj.price}</span>
-      </div>
-    </li>
-  );
-}
-
-function Footer() {
-  const hour = new Date().getHours();
-  const openHour = 12;
-  const closeHour = 22;
-  let isOpen = hour >= openHour && hour <= closeHour;
-  console.log(isOpen);
-  return (
-    <footer className="footer">
-      {isOpen ? (
-       <Order closeHour={closeHour} openHour={openHour}/>
-      ) : (
-        <p>
-          We're happy to welcome you between {openHour}:00 and {closeHour}:00. </p>
-      )}
-      {/* {new Date().toLocaleTimeString()} We're currently open */}
-    </footer>
-  );
-}
-
-
-
-function Order ({closeHour ,openHour}){
-  return (
-    <div className="order">
-      <p>We're open from {openHour}:00 to {closeHour}:00. Come visit us or order online.</p>
-      <button className="btn">Order</button>
-    </div>
-  );
-}
-export default App;
