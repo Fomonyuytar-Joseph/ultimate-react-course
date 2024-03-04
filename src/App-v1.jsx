@@ -1,4 +1,4 @@
-import { useState ,useEffect} from "react";
+import { useState } from "react";
 import "./App.css";
 
 const tempMovieData = [
@@ -51,26 +51,10 @@ const tempWatchedData = [
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
-
-  const KEY = "acf94f75";
-
 export default function App() {
-    const [movies, setMovies] = useState([]);
-    const [watched, setWatched] = useState([]);
+  const [movies, setMovies] = useState(tempMovieData);
+  const [watched, setWatched] = useState(tempWatchedData);
 
-// console.log('sadas');
-
-
-useEffect(() => {
-  fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=matrix`).then(res=> res.json()).then(data=>
-  setMovies(data.Search));
-
-
-}, []);
-
-    
-
- 
   return (
     <>
       <Navbar>
@@ -84,15 +68,15 @@ useEffect(() => {
         </Box>
 
         <Box>
-           <WatchedSummary watched={watched} />
-         <WatchedMoviesList watched={watched} />
+          <WatchedSummary watched={watched} />
+          <WatchedMoviesList watched={watched} />
         </Box>
       </Main>
     </>
   );
 }
 
-const Navbar = ({children}) => {
+const Navbar = ({ children }) => {
   return (
     <nav className="nav-bar">
       <Logo />
@@ -101,12 +85,8 @@ const Navbar = ({children}) => {
   );
 };
 
-const Main = ( {children}) => {
-  return (
-    <main className="main">
-      {children}
-    </main>
-  );
+const Main = ({ children }) => {
+  return <main className="main">{children}</main>;
 };
 
 const Logo = () => {
@@ -118,7 +98,7 @@ const Logo = () => {
   );
 };
 
-const NumResults = ({movies}) => {
+const NumResults = ({ movies }) => {
   return (
     <p className="num-results">
       Found <strong>{movies.length}</strong> results
@@ -140,7 +120,7 @@ const Search = () => {
   );
 };
 
-const Box = ({children}) => {
+const Box = ({ children }) => {
   const [isOpen1, setIsOpen1] = useState(true);
 
   return (
@@ -156,12 +136,11 @@ const Box = ({children}) => {
   );
 };
 
-const MovieList = ({movies}) => {
-
+const MovieList = ({ movies }) => {
   return (
     <ul className="list">
       {movies?.map((movie) => (
-        <Movie movie={movie}  key={movie.imdbID }/>
+        <Movie movie={movie} key={movie.imdbID} />
       ))}
     </ul>
   );
