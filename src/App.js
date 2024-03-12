@@ -58,7 +58,7 @@ export default function App() {
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const query = "matrix";
+  const query = "ssdf";
 
   useEffect(() => {
     const fecthMovies = async () => {
@@ -72,11 +72,18 @@ export default function App() {
           throw new Error("Something went wrong with fetching data");
         }
 
+       
+
         const data = await res.json();
+          if(data.Response === 'False'){
+            throw new Error('Movies not found')
+          }
+
+
         setMovies(data.Search);
         setIsLoading(false);
       } catch (err) {
-        console.log(err.messag);
+        console.log(err.message);
         setError(err.message);
       }finally{
         setIsLoading(false);
@@ -149,7 +156,7 @@ const Logo = () => {
 const NumResults = ({ movies }) => {
   return (
     <p className="num-results">
-      Found <strong>{movies.length}</strong> results
+      Found <strong>{movies?.length}</strong> results
     </p>
   );
 };
