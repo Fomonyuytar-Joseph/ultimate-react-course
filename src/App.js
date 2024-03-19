@@ -69,6 +69,10 @@ export default function App() {
     setSelectedId(null);
   };
 
+  const handleAddWatched = (movie) => {
+    setWatched((movie) => [...movie, movie]);
+  };
+
   useEffect(() => {
     const fecthMovies = async () => {
       try {
@@ -105,6 +109,9 @@ export default function App() {
     fecthMovies();
   }, [query]);
 
+
+  console.log(movies);
+
   return (
     <>
       <Navbar>
@@ -132,6 +139,7 @@ export default function App() {
             <MovieDetails
               selctedId={selectedId}
               onCloseMovie={handleCloseMovie}
+              onAddWatched={handleAddWatched}
             />
           ) : (
             <>
@@ -300,15 +308,21 @@ const WatchedMovie = ({ movie }) => {
   );
 };
 
-const MovieDetails = ({ selctedId, onCloseMovie }) => {
+const MovieDetails = ({ selctedId, onCloseMovie ,onAddWatched}) => {
   const [movie, setMovie] = useState({});
-    const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [userRating, setUserRating] = useState('');
 
 
- 
+  const handleAdd=()=>{
+    const newMovie = {imdbID:selctedId,title,year,poster,imdbRating:Number(imdbRating),runtime:Number(runtime.split(' ').at(0),userRating)}
+    onAddWatched(newMovie)
+    onCloseMovie()
+  }
+
   useEffect(() => {
     const getMovieDetails = async () => {
-      setIsLoading(true)
+      setIsLoading(true);
       try {
         const res = await fetch(
           `http://www.omdbapi.com/?apikey=${KEY}&i=${selctedId}`
@@ -319,7 +333,7 @@ const MovieDetails = ({ selctedId, onCloseMovie }) => {
         const data = await res.json();
         setMovie(data);
         console.log(data);
-        setIsLoading(false)
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -328,19 +342,18 @@ const MovieDetails = ({ selctedId, onCloseMovie }) => {
     getMovieDetails();
   }, [selctedId]);
 
-
-   const {
-     Title: title,
-     Year: year,
-     Poster: poster,
-     Runtime: runtime,
-     imdbRating,
-     Plot: plot,
-     Released: released,
-     Actors: actors,
-     Director: director,
-     Genre: genre,
-   } = movie;
+  const {
+    Title: title,
+    Year: year,
+    Poster: poster,
+    Runtime: runtime,
+    imdbRating,
+    Plot: plot,
+    Released: released,
+    Actors: actors,
+    Director: director,
+    Genre: genre,
+  } = movie;
 
   return (
     <div className="details">
@@ -367,7 +380,14 @@ const MovieDetails = ({ selctedId, onCloseMovie }) => {
 
           <section>
             <div className="rating">
-              {/* <StarRating maxRating={10} size={24} /> */}
+              <StarRating
+                maxRating={10}
+                size={24}
+                onSetRating={setUserRating}
+              />
+              {userRating > 0 && (
+                <button className="btn-add" onClick={handleAdd}>+ Add to List</button>
+              )}
             </div>
             <em>{plot}</em> <p>Staring {actors}</p>
             <p>Directed by {director}</p>
