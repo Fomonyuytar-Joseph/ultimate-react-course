@@ -60,7 +60,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedId, setSelectedId] = useState(null);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState("matrix");
 
   const handleSelectedMovie = (movieId) => {
     setSelectedId((selctedId) => (movieId === selctedId ? null : movieId));
@@ -108,7 +108,6 @@ export default function App() {
     }
     fecthMovies();
   }, [query]);
-
 
   console.log(movies);
 
@@ -308,17 +307,23 @@ const WatchedMovie = ({ movie }) => {
   );
 };
 
-const MovieDetails = ({ selctedId, onCloseMovie ,onAddWatched}) => {
+const MovieDetails = ({ selctedId, onCloseMovie, onAddWatched }) => {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [userRating, setUserRating] = useState('');
+  const [userRating, setUserRating] = useState("");
 
-
-  const handleAdd=()=>{
-    const newMovie = {imdbID:selctedId,title,year,poster,imdbRating:Number(imdbRating),runtime:Number(runtime.split(' ').at(0),userRating)}
-    onAddWatched(newMovie)
-    onCloseMovie()
-  }
+  const handleAdd = () => {
+    const newMovie = {
+      imdbID: selctedId,
+      title,
+      year,
+      poster,
+      imdbRating: Number(imdbRating),
+      runtime: Number(runtime.split(" ").at(0), userRating),
+    };
+    onAddWatched(newMovie);
+    onCloseMovie();
+  };
 
   useEffect(() => {
     const getMovieDetails = async () => {
@@ -355,6 +360,16 @@ const MovieDetails = ({ selctedId, onCloseMovie ,onAddWatched}) => {
     Genre: genre,
   } = movie;
 
+  useEffect(() => {
+    if(!title) {
+      return
+    }
+    document.title = `Movie | ${title}`;
+    return function(){
+      document.title = "usePopcorn";
+    }
+  }, [title]);
+
   return (
     <div className="details">
       {isLoading ? (
@@ -386,7 +401,9 @@ const MovieDetails = ({ selctedId, onCloseMovie ,onAddWatched}) => {
                 onSetRating={setUserRating}
               />
               {userRating > 0 && (
-                <button className="btn-add" onClick={handleAdd}>+ Add to List</button>
+                <button className="btn-add" onClick={handleAdd}>
+                  + Add to List
+                </button>
               )}
             </div>
             <em>{plot}</em> <p>Staring {actors}</p>
