@@ -2,6 +2,7 @@ import { useState, useEffect ,useRef} from "react";
 import "./App.css";
 import StarRating from "./components/StarRating";
 import { useMovies } from "./useMovies";
+import { useLocalStoage } from "./useLocalStorage";
 
 const tempMovieData = [
   {
@@ -59,11 +60,11 @@ export default function App() {
  
   const [selectedId, setSelectedId] = useState(null);
   const [query, setQuery] = useState("matrix");
-  const [watched, setWatched] = useState(function(){
-    const storedValue= localStorage.getItem('watched')
-    return JSON.parse(storedValue); 
-  });
-
+  // const [watched, setWatched] = useState(function(){
+  //   const storedValue= localStorage.getItem('watched')
+  //   return JSON.parse(storedValue); 
+  // });
+const [watched, setWatched] = useLocalStoage([],'watched ');
   const {movies,isLoading,error} = useMovies(query);
 
   const handleSelectedMovie = (movieId) => {
@@ -80,10 +81,10 @@ export default function App() {
   };
   
 
-  useEffect(()=>{
-        localStorage.setItem("watched", JSON.stringify([watched]));
+  // useEffect(()=>{
+  //       localStorage.setItem("watched", JSON.stringify([watched]));
 
-  },[watched])
+  // },[watched])
 
   // useEffect(() => {
   //   const controller = new AbortController();
